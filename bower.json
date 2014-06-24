@@ -1,0 +1,18 @@
+{
+  "name": "countdown",
+  "description": "A countdown timer element.",
+  "version": "0.0.0",
+  "author": "Carsten Sandtner",
+  "keywords": [
+  	"Element",
+    "web-components",
+    "x-tag"
+  ],
+  "main": [
+    "src/countdowm.js"
+    ,"src/countdowm.css"
+  ],
+  "dependencies": {
+    "x-tag-core": "*"
+  }
+}
