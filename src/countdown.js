@@ -9,27 +9,31 @@
 
     (function() {
         var lastTime = 0;
-        var vendors = ['ms', 'moz', 'webkit', 'o'];
-        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-            window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] ||
-                window[vendors[x]+'CancelRequestAnimationFrame'];
+        var vendors = ["ms", "moz", "webkit", "o"];
+        for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"];
+            window.cancelAnimationFrame = window[vendors[x] + "CancelAnimationFrame"] ||
+                window[vendors[x] + "CancelRequestAnimationFrame"];
         }
 
-        if (!window.requestAnimationFrame)
+        if (!window.requestAnimationFrame) {
             window.requestAnimationFrame = function(callback, element) {
                 var currTime = new Date().getTime();
                 var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-                var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                var id = window.setTimeout(function() {
+                        callback(currTime + timeToCall);
+                    },
                     timeToCall);
                 lastTime = currTime + timeToCall;
                 return id;
             };
+        }
 
-        if (!window.cancelAnimationFrame)
+        if (!window.cancelAnimationFrame) {
             window.cancelAnimationFrame = function(id) {
                 clearTimeout(id);
             };
+        }
     }());
 
     function Timer(countTo, renderTime, element) {
@@ -48,7 +52,7 @@
     };
 
     Timer.prototype.stop = function() {
-        this.this.runs = false;
+        this.runs = false;
     };
 
     Timer.prototype.start = function(startValue) {
@@ -103,32 +107,52 @@
             this._updateTimer.call(this);
         } else {
             this.runs = false;
-            xtag.fireEvent(this.element, 'countdownstopped');
+            xtag.fireEvent(this.element, "countdownstopped");
         }
     };
 
-    xtag.register('x-countdown', {
+    xtag.register("x-countdown", {
         lifecycle: {
             created: function() {
-                this.timer = new Timer(20, false, this);
+                this.renderTimer = this.getAttribute("render") === "true" ? true : false;
+                this.timer = new Timer(0, false, this);
+
+                if (this.renderTimer) {
+                    var template = xtag.createFragment('<div class="x-countdown-container"></div>');
+                    this.appendChild(template.cloneNode(true));
+
+                    var renderToElement = this.querySelector('.x-countdown-container');
+                    this.timer.setTimerElement(renderToElement);
+                    this.timer.renderTime = this.renderTimer;
+                }
             }
         },
-        events:    {},
-        accessors: {
+
+        events: {
 
         },
-        methods:   {
-            start: function() {
+
+        accessors: {
+            formattedTime: {
+                get: function() {
+                    return this.timer.getFormatedTime(this.timer.counter);
+                }
+            }
+        },
+
+        methods: {
+            start:            function() {
                 this.timer.start();
             },
-            stop:  function() {
+            stop:             function() {
                 this.timer.stop();
             },
-            getFormattedTime: function() {
-                return this.timer.getFormatedTime(this.timer.counter);
-            },
-            setCountdown: function(seconds) {
+            setCountdown:     function(seconds) {
                 this.timer.setCountdown(seconds);
+            },
+            restart: function(seconds) {
+                seconds = seconds || undefined;
+                this.timer.restart(seconds);
             }
 
         }
