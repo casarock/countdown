@@ -103,10 +103,11 @@
     Timer.prototype._loop = function() {
 
         if (this.runs && this.counter > 0) {
-            window.requestAnimationFrame(this._loop.bind(this));
+            this.animFrameId = window.requestAnimationFrame(this._loop.bind(this));
             this._updateTimer.call(this);
         } else {
             this.runs = false;
+            window.cancelAnimationFrame(this.animFrameId);
             xtag.fireEvent(this.element, "countdownstopped");
         }
     };
