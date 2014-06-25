@@ -9,8 +9,8 @@
     "x-tag"
   ],
   "main": [
-    "src/countdowm.js"
-    ,"src/countdowm.css"
+    "src/countdown.js"
+    ,"src/countdown.css"
   ],
   "dependencies": {
     "x-tag-core": "*"
