@@ -64,6 +64,8 @@ Take a look at `demo` for a [working example](http://casarock.github.io/experime
 # Download it
 [Releases are here](https://github.com/casarock/countdown/releases).
 
+Use bower: `bower install x-tag-countdown`
+
 
 # Dev Setup
 
