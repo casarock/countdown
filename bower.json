@@ -1,12 +1,13 @@
 {
   "name": "countdown",
   "description": "A countdown timer element.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Carsten Sandtner",
   "keywords": [
     "Element",
     "web-components",
-    "x-tag"
+    "x-tag",
+    "countdown"
   ],
   "main": [
     "src/countdown.js",
