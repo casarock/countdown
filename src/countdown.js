@@ -1,12 +1,13 @@
 (function() {
 
-    function Timer(countTo, renderTime) {
+    function Timer(countTo, renderTime, element) {
 
         this.countDown = countTo || 15;
         this.counter = this.countDown;
         this.initialCountDown = this.countDown;
         this.runs = false;
         this.renderTime = renderTime || false;
+        this.element = element;
     }
 
     Timer.prototype.restart = function(newStartValue) {
@@ -70,18 +71,20 @@
             this._updateTimer.call(this);
         } else {
             this.runs = false;
-            console.log("Stopped");
+            xtag.fireEvent(this.element, 'countdownstopped');
         }
     };
 
     xtag.register('x-countdown', {
         lifecycle: {
             created: function() {
-                this.timer = new Timer(20, false);
+                this.timer = new Timer(20, false, this);
             }
         },
         events:    {},
-        accessors: {},
+        accessors: {
+
+        },
         methods:   {
             start: function() {
                 this.timer.start();
@@ -91,6 +94,9 @@
             },
             getFormattedTime: function() {
                 return this.timer.getFormatedTime(this.timer.counter);
+            },
+            setCountdown: function(seconds) {
+                this.timer.setCountdown(seconds);
             }
 
         }
